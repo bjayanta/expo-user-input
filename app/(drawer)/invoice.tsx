@@ -6,6 +6,7 @@ import {
   Platform,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   View,
@@ -15,6 +16,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Invoice = () => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
+
+  const [products, setProducts] = useState([
+    { name: "Pen", quantity: 2, price: 10 },
+    { name: "Notebook", quantity: 1, price: 50 },
+  ]);
 
   const onChange = (event: any, selectedDate?: Date) => {
     setShow(false);
@@ -149,6 +155,116 @@ const Invoice = () => {
             />
           </View>
 
+          {/* Add Products */}
+          <View style={{ flexDirection: "column", gap: 16 }}>
+            <Text style={{ fontSize: 16 }}>Add Products</Text>
+
+            {/* Form */}
+            <View
+              style={{
+                flexDirection: "column",
+                gap: 16,
+              }}
+            >
+              <TextInput
+                placeholder="Product name"
+                keyboardType="default"
+                returnKeyType="next"
+                style={{ borderWidth: 1, borderColor: "gray", padding: 8 }}
+              />
+
+              <View style={{ flexDirection: "row", gap: 16 }}>
+                <TextInput
+                  placeholder="Quantity"
+                  keyboardType="number-pad"
+                  returnKeyType="next"
+                  style={{
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: "gray",
+                    padding: 8,
+                  }}
+                />
+
+                <TextInput
+                  placeholder="Price"
+                  keyboardType="decimal-pad"
+                  returnKeyType="next"
+                  style={{
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: "gray",
+                    padding: 8,
+                  }}
+                />
+
+                <Pressable
+                  onPress={() => alert("Add product (not implemented)")}
+                  style={({ pressed }) => [
+                    {
+                      alignItems: "center",
+                      backgroundColor: pressed ? "#004080" : "#007BFF",
+                      paddingHorizontal: 16,
+                      paddingVertical: 8,
+                    },
+                  ]}
+                >
+                  <Text style={{ color: "white" }}>+</Text>
+                </Pressable>
+              </View>
+            </View>
+
+            {/* Table */}
+            <View style={styles.table}>
+              {/* Header */}
+              <View style={styles.row}>
+                <Text style={[styles.cell, { fontWeight: "bold", flex: 2 }]}>
+                  Product
+                </Text>
+                <Text
+                  style={[
+                    styles.cell,
+                    { fontWeight: "bold", textAlign: "center" },
+                  ]}
+                >
+                  QTY
+                </Text>
+                <Text
+                  style={[
+                    styles.cell,
+                    { fontWeight: "bold", textAlign: "right" },
+                  ]}
+                >
+                  Price
+                </Text>
+                <Text
+                  style={[
+                    styles.cell,
+                    { fontWeight: "bold", textAlign: "right" },
+                  ]}
+                >
+                  Total
+                </Text>
+              </View>
+
+              {/* Rows */}
+              {products.map((product, index) => (
+                <View key={index} style={styles.row}>
+                  <Text style={[styles.cell, { flex: 2 }]}>{product.name}</Text>
+                  <Text style={[styles.cell, { textAlign: "center" }]}>
+                    {String(product.quantity)}
+                  </Text>
+                  <Text style={[styles.cell, { textAlign: "right" }]}>
+                    {String(product.price)}
+                  </Text>
+                  <Text style={[styles.cell, { textAlign: "right" }]}>
+                    {product.quantity * product.price}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
           <Pressable
             onPress={handleSubmit}
             style={({ pressed }) => [
@@ -172,5 +288,24 @@ const Invoice = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  table: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    overflow: "hidden",
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  cell: {
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRightWidth: 1,
+    borderColor: "#ccc",
+  },
+});
 
 export default Invoice;
